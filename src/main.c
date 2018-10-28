@@ -16,8 +16,10 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 	puzzleGame->options->rows = 4;
 	puzzleGame->options->cols = 4;
+	puzzleGame->options->gameType = EASY;
 	
-	initBoard(puzzleGame->board, 4, 4);
+	createBoard(puzzleGame->board, 4, 4);
+	initBoard(puzzleGame->board, puzzleGame->options->gameType);
 	gtk_init(&argc, &argv);
 
 	initApplication();

@@ -13,38 +13,38 @@
 #include "puzzleGame.h"
 #include "puzzleCss.h"
 
+//selectable options
 typedef struct {
     int rows;
     int cols;
+    int gameType;
 }GameOptions;
 
+//main struct that contains nececery informations
 typedef struct {
     GtkWidget *mainWindow;
     Board   *board;
     GameOptions *options;
 } PuzzleGame;
 
+//game info
 PuzzleGame *puzzleGame;
 
-//initialize application
-void initApplication();
+void initApplication();                                                     //Initialze whole window of puzzle game
+void initTopMenu(GtkWidget *menubar, GtkAccelGroup *accel_group);           //Initialize menubar
 
-// window callback prototypes
-void destroy_signal(GtkWidget *widget, gpointer data);
-gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);
+void destroy_signal(GtkWidget *widget, gpointer data);                      //Destructor for gtk
+gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);   //Sends destroy signal to window
 
+void optionNewGameCB(GtkWidget *widget, gpointer data);                     //On new game button callback
+void optionAboutCB(GtkWidget *widget, gpointer data);                       //On about button callback
+void optionQuitCB(GtkWidget *widget, gpointer data);                        //OnQuit button callback
+boardFieldCB(GtkWidget *widget, gpointer data);                             //On field of board structure callback
 
-//options menu
-void optionNewGameCB(GtkWidget *widget, gpointer data);
-void optionAboutCB(GtkWidget *widget, gpointer data);
-void optionQuitCB(GtkWidget *widget, gpointer data);
-
-//field buttons CB
-void boardFieldCB(GtkWidget *widget, gpointer data);
-void showVictory();
-void updateButtonLabel(int value, GtkWidget *button);
-void swapFields(Field *cell, Field *neigh);
-void freeMemory();
-void newGame();
+void showVictory();                                                         //Shows victory dialog
+void updateButtonLabel(int value, GtkWidget *button);                       //Function updates button value label
+void swapFields(Field *cell, Field *neigh);                                 //Function swaps two fields on board
+void freeMemory();                                                          //Function frees allocated memory
+void newGame();                                                             //Redraw board
 
 #endif // !PUZZLE_H

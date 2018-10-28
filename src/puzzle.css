@@ -6,7 +6,9 @@
     font-weight: bold;
     font-size: 30px;
     border-radius: 8px;
-    min-width: 40px;
+    min-width: 50px;
+    min-height: 50px;
+    border-color: gold;
 }
 #odd {
     background: white;
@@ -16,7 +18,9 @@
     font-weight: bold;
     font-size: 30px;
     border-radius: 8px;
-    min-width: 40px;
+    min-width: 50px;
+    min-height: 50px;
+    border-color: gold;
 }
 
 #zero {
@@ -25,6 +29,21 @@
     font-family: 'Times New Roman';
     font-style: normal;
     font-weight: bold;
-    min-width: 40px;
+    min-width: 50px;
+    min-height: 50px;
+    border-color: black;
 }
 
+#NewGame {
+    background: white;
+    color: red;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 8px;
+    min-width: 50px;
+    min-height: 40px;
+    border-color: black;
+    border-width: 2px;
+}
