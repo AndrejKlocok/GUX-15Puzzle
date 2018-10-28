@@ -1,0 +1,30 @@
+#prime {
+    background: red;
+    color: gold;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 8px;
+    min-width: 40px;
+}
+#odd {
+    background: white;
+    color: gold;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 8px;
+    min-width: 40px;
+}
+
+#zero {
+    background: black;
+    color: black;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: bold;
+    min-width: 40px;
+}
+

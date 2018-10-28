@@ -1,25 +1,17 @@
+/*
+ * Author:  Andrej Klocok
+ * Login :  xkloco00
+ */
+
 #ifndef PUZZLE_H
 #define PUZZLE_H
 
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdbool.h>
 
-typedef struct{
-    int value;
-    int row;
-    int col;
-    GtkWidget *button;
-} Field;
 
-typedef struct {
-    int rows;
-    int cols;
-    Field *fields;
-} Board;
+#include "puzzleGame.h"
+#include "puzzleCss.h"
 
 typedef struct {
     int rows;
@@ -32,18 +24,10 @@ typedef struct {
     GameOptions *options;
 } PuzzleGame;
 
-static PuzzleGame *puzzleGame;
+PuzzleGame *puzzleGame;
 
 //initialize application
 void initApplication();
-
-//ititialize board fields
-void initBoard(int rows, int cols);
-Field* gameStep(Field *cell);
-void swap(int *a, int *b);
-bool gameVictory();
-void freeMemory();
-void newGame();
 
 // window callback prototypes
 void destroy_signal(GtkWidget *widget, gpointer data);
@@ -58,4 +42,9 @@ void optionQuitCB(GtkWidget *widget, gpointer data);
 //field buttons CB
 void boardFieldCB(GtkWidget *widget, gpointer data);
 void showVictory();
+void updateButtonLabel(int value, GtkWidget *button);
+void swapFields(Field *cell, Field *neigh);
+void freeMemory();
+void newGame();
+
 #endif // !PUZZLE_H

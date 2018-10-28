@@ -3,7 +3,7 @@
  * Login :  xkloco00
  */
 
-#include "puzzle.h"
+#include "puzzleGUI.h"
 
 /* window destroyed */
 void destroy_signal(GtkWidget *widget, gpointer data)
@@ -51,57 +51,13 @@ void freeMemory(){
 	free(puzzleGame);
 }
 
-Field* getFieldFromBoard(int r, int c){
-	int pos;
-	if(r < 0 || c < 0 || r >= puzzleGame->board->rows || c >= puzzleGame->board->cols ){
-		return NULL;
-	}
-	pos = r * puzzleGame->board->cols + c;
-
-	return &puzzleGame->board->fields[pos];
-}
-
-Field* gameStep(Field *cell){
-	//check Upper
-	Field *n;
-	n = getFieldFromBoard(cell->row-1, cell->col);
-	if(n != NULL && n->value == 0){
-		return n;	
-	}
-	//check Lower
-	n = getFieldFromBoard(cell->row+1, cell->col);
-	if(n != NULL && n->value == 0){
-		return n;	
-	}
-	//check left
-	n = getFieldFromBoard(cell->row, cell->col-1);
-	if(n != NULL && n->value == 0){
-		return n;	
-	}
-	//check right
-	n = getFieldFromBoard(cell->row, cell->col+1);
-	if(n != NULL && n->value == 0){
-		return n;	
-	}
-	//nothing found
-	return NULL;
-}
-
-bool gameVictory(){
-	Board *board = puzzleGame->board;
-	int totalFields = board->cols * board->rows;
-	for(int i = 0; i <totalFields-1; i++ ){
-		if(board->fields[i].value != i+1){
-			return false;
-		}
-	}
-	return true;
-}
 
 void updateButtonLabel(int value, GtkWidget *button){
 	char  buf[5];
+
 	sprintf(buf, "%d", value);
 	gtk_button_set_label(GTK_BUTTON(button), buf);
+	addStyleBtn(button, value);
 }
 
 void swapFields(Field *cell, Field *neigh){
@@ -111,15 +67,14 @@ void swapFields(Field *cell, Field *neigh){
 	neigh->value = temp.value;
 	
 	updateButtonLabel(cell->value, cell->button);
-	updateButtonLabel(neigh->value, neigh->button);
-	
+	updateButtonLabel(neigh->value, neigh->button);	
 }
 
 void boardFieldCB(GtkWidget *widget, gpointer data){
 	Field *cell = (Field*) data;
 	Field *neigh;
 	//check neighboors
-	neigh = gameStep(cell);
+	neigh = gameStep(puzzleGame->board, cell);
 	//no empty cell around
 	if(neigh == NULL){
 		return;
@@ -127,7 +82,7 @@ void boardFieldCB(GtkWidget *widget, gpointer data){
 	//swap fields if 0 
 	swapFields(cell, neigh);
 	//check win state
-	if(gameVictory()){
+	if(gameVictory(puzzleGame->board)){
 		printf("Victory\n");
 		showVictory();
 		newGame();
@@ -224,53 +179,10 @@ void initApplication(){
 	for (int i=0; i< numbOfFields; i++){
 		sprintf(nameField, "%d", board->fields[i].value);
 		board->fields[i].button = gtk_button_new_with_label(nameField);
+		addStyleBtn(board->fields[i].button, board->fields[i].value);
 		g_signal_connect(G_OBJECT(board->fields[i].button), "clicked", G_CALLBACK(boardFieldCB), &board->fields[i]);
 		gtk_grid_attach(GTK_GRID(boardGrid), board->fields[i].button, i%4, i/4, 1, 1);
 		
-	}
-}
-
-void swap(int *a, int *b){
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-void initBoard(int rows, int cols){
-	Board *board = puzzleGame->board;
-	int r = 0;
-	int c = 0;
-	int totalFields = rows*cols;
-	int numbArr[totalFields];// = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,0,15};
-	int randVal;
-
-	board->rows = rows;
-	board->cols = cols;
-	board->fields = malloc(sizeof(Field)*totalFields);
-	
-	//init "table" of values
-	for(int i=0; i< totalFields; i++){
-		numbArr[i]=i;
-	}
-
-	//random array
-	for(int i=totalFields-1; i>0;i--){
-		randVal = rand() % (i+1);
-		swap(&numbArr[i], &numbArr[randVal]);
-
-	}
-	
-	//init values
-	for(int i = 0; i < totalFields; i++){
-		board->fields[i].value = numbArr[i];
-		board->fields[i].row = r;
-		board->fields[i].col = c;
-		c++;
-		//we have 4 collumns indexed from 0
-		if(c>3){
-			c = 0;
-			r++;
-		}
 	}
 }
 
@@ -278,31 +190,11 @@ void newGame(){
 	//free fields
 	free(puzzleGame->board->fields);
 	//init board
-	initBoard(puzzleGame->options->rows, puzzleGame->options->cols);
+	initBoard(puzzleGame->board, puzzleGame->options->rows, puzzleGame->options->cols);
 	//redraw buttons
 	int totalFields = puzzleGame->board->rows * puzzleGame->board->cols;
 	for(int i = 0; i < totalFields; i++){
 		Field *f = &puzzleGame->board->fields[i];
 		updateButtonLabel(f->value, f->button);
 	}
-}
-
-int main(int argc, char *argv[])
-{
-	puzzleGame = malloc(sizeof(PuzzleGame));
-	puzzleGame->board = malloc(sizeof(Board));
-	puzzleGame->options = malloc(sizeof(GameOptions));
-	srand(time(NULL));
-	puzzleGame->options->rows = 4;
-	puzzleGame->options->cols = 4;
-	
-	initBoard(4,4);
-	gtk_init(&argc, &argv);
-
-	initApplication();
-	
-	gtk_widget_show_all(puzzleGame->mainWindow);
-
-	gtk_main();
-	return 0;
 }
