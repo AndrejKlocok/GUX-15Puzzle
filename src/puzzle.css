@@ -1,4 +1,22 @@
-#prime {
+
+#numbC {
+    background: white;
+    color: black;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 8px;
+    border-color: black;
+    border-style: solid;
+    min-width: 50px;
+    min-height: 50px;
+    background-image: none;
+}
+#numbC:hover{
+    background: grey;
+}
+#primeR {
     background: red;
     color: gold;
     font-family: 'Times New Roman';
@@ -9,8 +27,15 @@
     min-width: 50px;
     min-height: 50px;
     border-color: gold;
+    background-image: none;
 }
-#odd {
+#primeR:hover{
+    color: white;
+}
+#primeR:active{
+    color: purple
+}
+#oddR {
     background: white;
     color: gold;
     font-family: 'Times New Roman';
@@ -21,8 +46,15 @@
     min-width: 50px;
     min-height: 50px;
     border-color: gold;
+    background-image: none;
 }
-
+#oddR:hover{
+    background: white;
+    color: red;
+}
+#oddR:active{
+    color: purple
+}
 #zero {
     background: black;
     color: black;
@@ -32,18 +64,13 @@
     min-width: 50px;
     min-height: 50px;
     border-color: black;
+    background-image: none;
 }
-
-#NewGame {
-    background: white;
-    color: red;
-    font-family: 'Times New Roman';
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    border-radius: 8px;
+#zero:hover{
+    background: midnightblue;
+}
+#img{
     min-width: 50px;
-    min-height: 40px;
-    border-color: black;
-    border-width: 2px;
+    min-height: 50px;
+    background-image: none;
 }

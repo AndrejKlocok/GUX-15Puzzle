@@ -92,11 +92,7 @@ void freeMemory(){
  * @param button 	button
  */
 void updateButtonLabel(int value, GtkWidget *button){
-	char  buf[5];
-
-	sprintf(buf, "%d", value);
-	gtk_button_set_label(GTK_BUTTON(button), buf);
-	addStyleBtn(button, value);
+	addStyleBtn(button, value, puzzleGame->options->theme, puzzleGame->options->themeImgs);
 }
 
 /**
@@ -110,12 +106,21 @@ void swapFields(Field *cell, Field *neigh){
 	Field temp = *cell;
 	cell->value = neigh->value;
 	neigh->value = temp.value;
-	
-	//update labels
-	updateButtonLabel(cell->value, cell->button);
-	updateButtonLabel(neigh->value, neigh->button);	
-}
 
+	updateButtonLabel(cell->value, cell->button);
+	updateButtonLabel(neigh->value, neigh->button);
+	redrawFields();
+}
+/**
+ * @brief Redraw images of fields on board
+ * 
+ */
+void redrawFields(){
+	for(int i=0; i< (puzzleGame->board->cols * puzzleGame->board->rows); i++){
+		Field *f =&puzzleGame->board->fields[i];
+		addStyleBtn(f->button, f->value, puzzleGame->options->theme, puzzleGame->options->themeImgs);
+	}
+}
 /**
  * @brief On field of board structure callback
  * 
@@ -141,7 +146,16 @@ void boardFieldCB(GtkWidget *widget, gpointer data){
 		newGame();
 	}
 }
-
+/**
+ * @brief Change current theme call back
+ * 
+ * @param widget 	GtkWidget *widget
+ * @param data 		gpointer data
+ */
+void changeThemeCB(GtkWidget *widget, gpointer data){
+	puzzleGame->options->theme =  GPOINTER_TO_INT(data);
+	redrawFields();
+}
 /**
  * @brief Shows victory dialog
  * 
@@ -171,6 +185,9 @@ void initTopMenu(GtkWidget *menubar, GtkAccelGroup *accel_group){
 	//new game menu and buttons
 	GtkWidget *newGameItem, *newGameMenu;
 	GtkWidget *btnRandom, *btnEasy, *btnAdvanced, *btnTest;
+	//theme menu and buttons
+	GtkWidget *themeItem, *themeMenu;
+	GtkWidget *btnRoyal, *btnClassic, *btnKitten;
 
 	//options menu
 	options = gtk_menu_item_new_with_mnemonic("_Options");
@@ -220,6 +237,30 @@ void initTopMenu(GtkWidget *menubar, GtkAccelGroup *accel_group){
 	gtk_widget_add_accelerator(btnRandom, "activate", accel_group, GDK_KEY_r, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(newGameMenu), btnRandom);
 	g_signal_connect(G_OBJECT(btnRandom), "activate", G_CALLBACK(optionNewGameCB), GINT_TO_POINTER(RANDOM));
+
+	//Theme menu
+	themeItem = gtk_menu_item_new_with_mnemonic("_Theme");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar), themeItem);
+	themeMenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(themeItem), themeMenu);
+
+	//royal
+	btnRoyal = gtk_menu_item_new_with_mnemonic("_Royal");
+	gtk_widget_add_accelerator(btnRoyal, "activate", accel_group, GDK_KEY_1, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(themeMenu), btnRoyal);
+	g_signal_connect(G_OBJECT(btnRoyal), "activate", G_CALLBACK(changeThemeCB), GINT_TO_POINTER(RoyalT));
+
+	//classic
+	btnClassic = gtk_menu_item_new_with_mnemonic("_Classic");
+	gtk_widget_add_accelerator(btnClassic, "activate", accel_group, GDK_KEY_2, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(themeMenu), btnClassic);
+	g_signal_connect(G_OBJECT(btnClassic), "activate", G_CALLBACK(changeThemeCB), GINT_TO_POINTER(ClassicT));
+
+	//kitten
+	btnKitten = gtk_menu_item_new_with_mnemonic("_Kitten");
+	gtk_widget_add_accelerator(btnKitten, "activate", accel_group, GDK_KEY_3, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(themeMenu), btnKitten);
+	g_signal_connect(G_OBJECT(btnKitten), "activate", G_CALLBACK(changeThemeCB), GINT_TO_POINTER(KittenT));
 }
 
 /**
@@ -227,7 +268,7 @@ void initTopMenu(GtkWidget *menubar, GtkAccelGroup *accel_group){
  * 
  */
 void initApplication(){
-	GtkWidget *vbox, *content, *boardGrid, *menuGrid;
+	GtkWidget *vbox, *content, *boardGrid;
 	GtkWidget *menubar;
 	GtkAccelGroup *accel_group;	
 
@@ -269,24 +310,22 @@ void initApplication(){
 
 	boardGrid = gtk_grid_new();
 	gtk_widget_set_size_request(boardGrid, 200, 200);
-	menuGrid = gtk_grid_new();
+	//menuGrid = gtk_grid_new();
 	
 	gtk_box_pack_start(GTK_BOX(content), boardGrid, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(content), menuGrid, FALSE, FALSE, 40);
+	//gtk_box_pack_start(GTK_BOX(content), menuGrid, FALSE, FALSE, 40);
 
 	//init board
 	char nameField[10];
 
 	for (int i=0; i< numbOfFields; i++){
 		sprintf(nameField, "%d", board->fields[i].value);
-		board->fields[i].button = gtk_button_new_with_label(nameField);
-		addStyleBtn(board->fields[i].button, board->fields[i].value);
+		board->fields[i].button = gtk_button_new_with_label(nameField);			//displayed button
+		addStyleBtn(board->fields[i].button, board->fields[i].value, puzzleGame->options->theme, puzzleGame->options->themeImgs);
 		g_signal_connect(G_OBJECT(board->fields[i].button), "clicked", G_CALLBACK(boardFieldCB), &board->fields[i]);
 		gtk_grid_attach(GTK_GRID(boardGrid), board->fields[i].button, i%4, i/4, 1, 1);
 		
 	}
-
-
 }
 /**
  * @brief Redraw board
@@ -300,5 +339,8 @@ void newGame(){
 	for(int i = 0; i < totalFields; i++){
 		Field *f = &puzzleGame->board->fields[i];
 		updateButtonLabel(f->value, f->button);
+	}
+	if(puzzleGame->options->theme == KittenT){
+		redrawFields();
 	}
 }

@@ -18,6 +18,8 @@ typedef struct {
     int rows;
     int cols;
     int gameType;
+    enum Themes theme;
+    ThemeImgs *themeImgs;
 }GameOptions;
 
 //main struct that contains nececery informations
@@ -39,7 +41,9 @@ gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);   //Se
 void optionNewGameCB(GtkWidget *widget, gpointer data);                     //On new game button callback
 void optionAboutCB(GtkWidget *widget, gpointer data);                       //On about button callback
 void optionQuitCB(GtkWidget *widget, gpointer data);                        //OnQuit button callback
-boardFieldCB(GtkWidget *widget, gpointer data);                             //On field of board structure callback
+void boardFieldCB(GtkWidget *widget, gpointer data);                        //On field of board structure callback
+void changeThemeCB(GtkWidget *widget, gpointer data);                       //Change theme callback
+void redrawFields();                                                        //Redraw images of fields on board
 
 void showVictory();                                                         //Shows victory dialog
 void updateButtonLabel(int value, GtkWidget *button);                       //Function updates button value label
