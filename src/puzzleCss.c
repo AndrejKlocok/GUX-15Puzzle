@@ -35,15 +35,13 @@ void initPictures(Board *board, ThemeImgs *imgs){
         gtk_widget_show(GTK_WIDGET(imgs->images[i].image));
         memset(name,0,50);
     }
-    imgs->pix = gtk_image_new_from_file(name);
-    g_object_ref(imgs->pix);
 }
 
 void addStyleBtn(GtkWidget *btn, int value, enum Themes theme, ThemeImgs *imgs){
     char  buf[5];
 
 	sprintf(buf, "%d", value);
-    gtk_button_set_image (GTK_BUTTON (btn), imgs->pix);
+    gtk_button_set_image (GTK_BUTTON (btn), NULL);
             
     switch (theme)
     {

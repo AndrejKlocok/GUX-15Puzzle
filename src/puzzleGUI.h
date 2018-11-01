@@ -22,11 +22,18 @@ typedef struct {
     ThemeImgs *themeImgs;
 }GameOptions;
 
+//player moves
+typedef struct {
+    int moves;
+    GtkWidget *label;
+} GameMoves;
+
 //main struct that contains nececery informations
 typedef struct {
     GtkWidget *mainWindow;
     Board   *board;
     GameOptions *options;
+    GameMoves *playerMoves;
 } PuzzleGame;
 
 //game info
@@ -45,6 +52,7 @@ void boardFieldCB(GtkWidget *widget, gpointer data);                        //On
 void changeThemeCB(GtkWidget *widget, gpointer data);                       //Change theme callback
 void redrawFields();                                                        //Redraw images of fields on board
 
+void moveInc(int val);                                                      //Increase player moves
 void showVictory();                                                         //Shows victory dialog
 void updateButtonLabel(int value, GtkWidget *button);                       //Function updates button value label
 void swapFields(Field *cell, Field *neigh);                                 //Function swaps two fields on board

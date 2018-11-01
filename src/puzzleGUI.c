@@ -82,6 +82,7 @@ void freeMemory(){
 	free(puzzleGame->board->fields);
 	free(puzzleGame->board);
 	free(puzzleGame->options);
+	free(puzzleGame->playerMoves);
 	free(puzzleGame);
 }
 
@@ -122,6 +123,18 @@ void redrawFields(){
 	}
 }
 /**
+ * @brief Increase player moves
+ * 
+ */
+void moveInc(int val){
+	char str[100];
+	memset(&str, 0, 100);
+	//inc
+	sprintf(str, "moves: %d", val);
+	//update
+	gtk_label_set_text(GTK_LABEL(puzzleGame->playerMoves->label), str);
+}
+/**
  * @brief On field of board structure callback
  * 
  * @param widget 	GtkWidget *widget
@@ -139,9 +152,12 @@ void boardFieldCB(GtkWidget *widget, gpointer data){
 	}
 	//swap fields if 0 
 	swapFields(cell, neigh);
+	
+	//inc moves
+	moveInc(++puzzleGame->playerMoves->moves);
+
 	//check win state
 	if(gameVictory(puzzleGame->board)){
-		printf("Victory\n");
 		showVictory();
 		newGame();
 	}
@@ -268,7 +284,7 @@ void initTopMenu(GtkWidget *menubar, GtkAccelGroup *accel_group){
  * 
  */
 void initApplication(){
-	GtkWidget *vbox, *content, *boardGrid;
+	GtkWidget *vbox, *content, *boardGrid, *infoGrid;
 	GtkWidget *menubar;
 	GtkAccelGroup *accel_group;	
 
@@ -291,11 +307,11 @@ void initApplication(){
 	menubar = gtk_menu_bar_new();
 
 	/* content */
-	content = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	content = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 	
 
 	gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), content, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), content, FALSE, FALSE, 0);
 
 	/* start accelerator group */
 	accel_group = gtk_accel_group_new();
@@ -309,11 +325,15 @@ void initApplication(){
 	int numbOfFields = board->rows * board->cols;
 
 	boardGrid = gtk_grid_new();
-	gtk_widget_set_size_request(boardGrid, 200, 200);
-	//menuGrid = gtk_grid_new();
-	
-	gtk_box_pack_start(GTK_BOX(content), boardGrid, FALSE, FALSE, 0);
-	//gtk_box_pack_start(GTK_BOX(content), menuGrid, FALSE, FALSE, 40);
+	infoGrid = gtk_grid_new();
+
+	puzzleGame->playerMoves->label = gtk_label_new("moves: 0");
+	gtk_widget_set_name(puzzleGame->playerMoves->label, "moves");
+
+	gtk_grid_attach(GTK_GRID(infoGrid), puzzleGame->playerMoves->label, 0, 0, 1, 1);
+
+	gtk_widget_set_halign (infoGrid, GTK_ALIGN_CENTER);
+	gtk_box_pack_start(GTK_BOX(content), infoGrid, TRUE, TRUE, 1);
 
 	//init board
 	char nameField[10];
@@ -326,6 +346,10 @@ void initApplication(){
 		gtk_grid_attach(GTK_GRID(boardGrid), board->fields[i].button, i%4, i/4, 1, 1);
 		
 	}
+	gtk_widget_set_halign (boardGrid, GTK_ALIGN_CENTER);
+	gtk_box_pack_start(GTK_BOX(content), boardGrid, TRUE, TRUE, 1);
+
+
 }
 /**
  * @brief Redraw board
@@ -343,4 +367,7 @@ void newGame(){
 	if(puzzleGame->options->theme == KittenT){
 		redrawFields();
 	}
+	//reset moves counter
+	puzzleGame->playerMoves->moves=0;
+	moveInc(puzzleGame->playerMoves->moves);
 }

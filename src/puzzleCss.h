@@ -16,7 +16,6 @@ typedef struct{
 typedef struct{
     ImageStruct *images;
     int length;
-    GtkWidget *pix;
 } ThemeImgs;
 
 void initCSS();
