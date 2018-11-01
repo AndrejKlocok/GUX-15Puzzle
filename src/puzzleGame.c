@@ -1,6 +1,7 @@
 /*
  * Author:  Andrej Klocok
- * Login :  xkloco00
+ * Login:	xkloco00
+ * File:	puzzleGame.c
  */
 
 #include "puzzleGame.h"

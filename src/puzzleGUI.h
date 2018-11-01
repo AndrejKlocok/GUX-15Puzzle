@@ -1,6 +1,7 @@
 /*
  * Author:  Andrej Klocok
- * Login :  xkloco00
+ * Login:	xkloco00
+ * File:	puzzleGUI.h
  */
 
 #ifndef PUZZLE_H
@@ -8,7 +9,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-
+#include <string.h>
 
 #include "puzzleGame.h"
 #include "puzzleCss.h"

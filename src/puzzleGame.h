@@ -1,8 +1,8 @@
 /*
  * Author:  Andrej Klocok
- * Login :  xkloco00
+ * Login:	xkloco00
+ * File:	puzzleGame.h
  */
-
 #ifndef GAME_H
 #define GAME_H
 

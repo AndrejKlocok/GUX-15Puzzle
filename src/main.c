@@ -1,6 +1,7 @@
 /*
  * Author:  Andrej Klocok
- * Login :  xkloco00
+ * Login:	xkloco00
+ * File:	main.c
  */
 
 #include "puzzleGUI.h"

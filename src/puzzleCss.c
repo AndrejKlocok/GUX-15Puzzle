@@ -1,5 +1,13 @@
+/*
+ * Author:  Andrej Klocok
+ * Login:	xkloco00
+ * File:	puzzleCss.c
+ */
 #include "puzzleCss.h"
-
+/**
+ * @brief Initialize css properties from CSS file
+ * 
+ */
 void initCSS(){
     GtkCssProvider *cssProvider;
 	GdkDisplay *display;
@@ -18,7 +26,12 @@ void initCSS(){
     GtkSettings *default_settings = gtk_settings_get_default();
     g_object_set(default_settings, "gtk-button-images", TRUE, NULL); 
 }
-
+/**
+ * @brief Loads pictures from img directory to game structure
+ * 
+ * @param board     board
+ * @param imgs      structure that holds images
+ */
 void initPictures(Board *board, ThemeImgs *imgs){
 
     int totalFields = board->cols * board->rows;
@@ -36,7 +49,14 @@ void initPictures(Board *board, ThemeImgs *imgs){
         memset(name,0,50);
     }
 }
-
+/**
+ * @brief Function add style to button according to used theme and value that button struct(Field) holds
+ * 
+ * @param btn       button
+ * @param value     Field value
+ * @param Themes    used theme
+ * @param imgs      loaded images
+ */
 void addStyleBtn(GtkWidget *btn, int value, enum Themes theme, ThemeImgs *imgs){
     char  buf[5];
 
