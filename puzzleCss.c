@@ -12,7 +12,7 @@ void initCSS(){
     GtkCssProvider *cssProvider;
 	GdkDisplay *display;
   	GdkScreen *screen;
-	char* cssFilePath = "src/puzzle.css";
+	char* cssFilePath = "puzzle.css";
 
 	cssProvider = gtk_css_provider_new ();
     display = gdk_display_get_default ();
@@ -42,7 +42,7 @@ void initPictures(Board *board, ThemeImgs *imgs){
 
     //load colors
     for(int i=0; i< totalFields; i++){
-        sprintf(name, "img/cat%d.jpg",i);
+        sprintf(name, "cat%d.jpg",i);
         imgs->images[i].image = gtk_image_new_from_file(name);
         g_object_ref(imgs->images[i].image);
         gtk_widget_show(GTK_WIDGET(imgs->images[i].image));

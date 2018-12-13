@@ -2,28 +2,24 @@
 # login:  	xkloco00
 # file:		Makefile
 
-SRC_DIR  	= src
-BUILD_DIR	= build
+SRC_DIR  	= .
+BUILD_DIR	= .
 MAKEDIR  	= mkdir -p
 SRC_FILES   = $(wildcard $(SRC_DIR)/*.c)
-OBJ			= build/puzzleGUI.o build/puzzleGame.o build/main.o build/puzzleCss.o
+OBJ			= $(BUILD_DIR)/puzzleGUI.o $(BUILD_DIR)/puzzleGame.o $(BUILD_DIR)/main.o $(BUILD_DIR)/puzzleCss.o
 TARGET 		= puzzle
 
 
 CFLAGS = -std=c11 -Wall -pedantic -O2  `pkg-config --cflags gtk+-3.0` 
 LDLIBS = `pkg-config --libs gtk+-3.0`
-#/DLIBS = $(shell pkg-config --libs gtk+-3.0)
 LDFLAGS =  -g
 CC = gcc 
 
 
-default: folder $(TARGET)
+default: $(TARGET)
 
-folder:
-	$(MAKEDIR) $(BUILD_DIR)
-
-#$(BUILD_DIR)/%.o:$(SRC_DIR)/%.c 
-#	$(CC) $(CFLAGS) -c -I$(SRC_DIR) $< -o $@
+#folder:
+#	$(MAKEDIR) $(BUILD_DIR)
 
 $(BUILD_DIR)/main.o:	
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/main.c -o $@
