@@ -12,4 +12,5 @@ Compilation requires GTK3 library. To install gtk3 for development cases:
     $ make
 
 ## Usage
-    $ puzzle
+    $ make run
+    alternative $ ./puzzle
